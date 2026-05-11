@@ -58,6 +58,9 @@
     <Compile Include="Models\Tour.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AgencyService.cs" />
+    <Compile Include="Services\BookingService.cs" />
+    <Compile Include="Services\TourService.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -82,7 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Forms\" />
-    <Folder Include="Services\" />
     <Folder Include="Storage\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
