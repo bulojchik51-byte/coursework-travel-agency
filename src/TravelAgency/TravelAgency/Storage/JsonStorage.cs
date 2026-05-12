@@ -29,13 +29,25 @@ namespace TravelAgency.Storage
 
         public List<T> Load<T>(string fileName)
         {
-            string path = Path.Combine(_dataFolder, fileName);
+            try
+            {
+                string path = Path.Combine(_dataFolder, fileName);
 
-            if (!File.Exists(path))
+                if (!File.Exists(path))
+                    return new List<T>();
+
+                string json = File.ReadAllText(path);
+
+                if (string.IsNullOrWhiteSpace(json))
+                    return new List<T>();
+
+                var result = JsonConvert.DeserializeObject<List<T>>(json);
+                return result ?? new List<T>();
+            }
+            catch
+            {
                 return new List<T>();
-
-            string json = File.ReadAllText(path);
-            return JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
+            }
         }
     }
 }

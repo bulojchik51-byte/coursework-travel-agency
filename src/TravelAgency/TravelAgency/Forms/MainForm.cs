@@ -23,24 +23,26 @@ namespace TravelAgency.Forms
             _tourService = new TourService();
             _bookingService = new BookingService();
 
-            LoadAgenciesToGrid();
-
             addAgencyButton.Click += AddAgencyButton_Click;
             editAgencyButton.Click += EditAgencyButton_Click;
             deleteAgencyButton.Click += DeleteAgencyButton_Click;
             searchAgencyButton.Click += SearchAgencyButton_Click;
-            exitMenuItem.Click += (s, e) => Application.Exit();
+
             addTourButton.Click += AddTourButton_Click;
             editTourButton.Click += EditTourButton_Click;
             deleteTourButton.Click += DeleteTourButton_Click;
             searchTourButton.Click += SearchTourButton_Click;
 
-            LoadToursToGrid();
             addBookingButton.Click += AddBookingButton_Click;
             deleteBookingButton.Click += DeleteBookingButton_Click;
             confirmBookingButton.Click += ConfirmBookingButton_Click;
 
-            LoadBookingsToGrid();
+            saveMenuItem.Click += SaveMenuItem_Click;
+            loadMenuItem.Click += LoadMenuItem_Click;
+            exitMenuItem.Click += (s, e) => Application.Exit();
+            this.FormClosing += MainForm_FormClosing;
+
+            LoadData();
         }
 
         private void LoadAgenciesToGrid()
@@ -255,6 +257,55 @@ namespace TravelAgency.Forms
             _bookingService.UpdateStatus(booking.Id, "Подтверждено");
             LoadBookingsToGrid();
             MessageBox.Show("Бронирование подтверждено!");
+        }
+        private void SaveData()
+        {
+            _storage.Save("agencies.json", _agencyService.GetAll());
+            _storage.Save("tours.json", _tourService.GetAll());
+            _storage.Save("bookings.json", _bookingService.GetAll());
+        }
+
+        private void LoadData()
+        {
+            try
+            {
+                var agencies = _storage.Load<Agency>("agencies.json");
+                foreach (var a in agencies)
+                    _agencyService.Add(a);
+
+                var tours = _storage.Load<Tour>("tours.json");
+                foreach (var t in tours)
+                    _tourService.Add(t);
+
+                var bookings = _storage.Load<Booking>("bookings.json");
+                foreach (var b in bookings)
+                    _bookingService.Add(b);
+
+                LoadAgenciesToGrid();
+                LoadToursToGrid();
+                LoadBookingsToGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+            }
+        }
+
+        private void SaveMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveData();
+            MessageBox.Show("Данные сохранены!");
+        }
+
+        private void LoadMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadData();
+            MessageBox.Show("Данные загружены!");
+        }
+
+        private void MainForm_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            SaveData();
         }
     }
 }
