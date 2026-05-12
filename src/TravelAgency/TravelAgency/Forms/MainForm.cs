@@ -12,6 +12,7 @@ namespace TravelAgency.Forms
         private readonly AgencyService _agencyService;
         private readonly TourService _tourService;
         private readonly BookingService _bookingService;
+        private readonly CountryService _countryService;
         private readonly JsonStorage _storage;
 
         public MainForm()
@@ -22,29 +23,71 @@ namespace TravelAgency.Forms
             _agencyService = new AgencyService();
             _tourService = new TourService();
             _bookingService = new BookingService();
+            _countryService = new CountryService();
 
+            // Навигация
+            navHomeButton.Click += (s, e) => ShowPanel(homePanel);
+            navAgenciesButton.Click += (s, e) => ShowPanel(agenciesPanel);
+            navToursButton.Click += (s, e) => ShowPanel(toursPanel);
+            navCountriesButton.Click += (s, e) => ShowPanel(countriesPanel);
+            navBookingsButton.Click += (s, e) => ShowPanel(bookingsPanel);
+
+            // Агентства
             addAgencyButton.Click += AddAgencyButton_Click;
             editAgencyButton.Click += EditAgencyButton_Click;
             deleteAgencyButton.Click += DeleteAgencyButton_Click;
             searchAgencyButton.Click += SearchAgencyButton_Click;
 
+            // Туры
             addTourButton.Click += AddTourButton_Click;
             editTourButton.Click += EditTourButton_Click;
             deleteTourButton.Click += DeleteTourButton_Click;
             searchTourButton.Click += SearchTourButton_Click;
 
+            // Страны
+            addCountryButton.Click += AddCountryButton_Click;
+            editCountryButton.Click += EditCountryButton_Click;
+            deleteCountryButton.Click += DeleteCountryButton_Click;
+
+            // Бронирования
             addBookingButton.Click += AddBookingButton_Click;
             deleteBookingButton.Click += DeleteBookingButton_Click;
             confirmBookingButton.Click += ConfirmBookingButton_Click;
 
-            saveMenuItem.Click += SaveMenuItem_Click;
-            loadMenuItem.Click += LoadMenuItem_Click;
-            exitMenuItem.Click += (s, e) => Application.Exit();
-            this.FormClosing += MainForm_FormClosing;
+            this.FormClosing += (s, e) => SaveData();
 
             LoadData();
+            ShowPanel(homePanel);
         }
 
+        private void ShowPanel(Panel panel)
+        {
+            homePanel.Visible = false;
+            agenciesPanel.Visible = false;
+            toursPanel.Visible = false;
+            countriesPanel.Visible = false;
+            bookingsPanel.Visible = false;
+
+            panel.Visible = true;
+
+            if (panel == homePanel) UpdateStats();
+            if (panel == agenciesPanel) LoadAgenciesToGrid();
+            if (panel == toursPanel) LoadToursToGrid();
+            if (panel == countriesPanel) LoadCountriesToGrid();
+            if (panel == bookingsPanel) LoadBookingsToGrid();
+        }
+
+        private void UpdateStats()
+        {
+            agenciesCountLabel.Text = $"🏢 Агентств:\n{_agencyService.GetAll().Count}";
+            toursCountLabel.Text = $"✈ Туров:\n{_tourService.GetAll().Count}";
+            bookingsCountLabel.Text = $"📋 Броней:\n{_bookingService.GetAll().Count}";
+            countriesCountLabel.Text = $"🌍 Стран:\n{_countryService.GetAll().Count}";
+        }
+
+        // ═══════════════════════════════
+        // АГЕНТСТВА
+        // ═══════════════════════════════
         private void LoadAgenciesToGrid()
         {
             agenciesGrid.DataSource = null;
@@ -65,10 +108,9 @@ namespace TravelAgency.Forms
         {
             if (agenciesGrid.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите агентство для редактирования!");
+                MessageBox.Show("Выберите агентство!");
                 return;
             }
-
             var agency = agenciesGrid.SelectedRows[0].DataBoundItem as Agency;
             if (agency == null) return;
 
@@ -84,20 +126,13 @@ namespace TravelAgency.Forms
         {
             if (agenciesGrid.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите агентство для удаления!");
+                MessageBox.Show("Выберите агентство!");
                 return;
             }
-
             var agency = agenciesGrid.SelectedRows[0].DataBoundItem as Agency;
             if (agency == null) return;
 
-            var result = MessageBox.Show(
-                $"Удалить агентство '{agency.Name}'?",
-                "Подтверждение",
-                MessageBoxButtons.YesNo
-            );
-
-            if (result == DialogResult.Yes)
+            if (MessageBox.Show($"Удалить '{agency.Name}'?", "Подтверждение", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 _agencyService.Delete(agency.Id);
                 LoadAgenciesToGrid();
@@ -107,16 +142,15 @@ namespace TravelAgency.Forms
         private void SearchAgencyButton_Click(object sender, EventArgs e)
         {
             string query = searchAgencyBox.Text.Trim();
-
-            if (string.IsNullOrEmpty(query))
-            {
-                LoadAgenciesToGrid();
-                return;
-            }
-
             agenciesGrid.DataSource = null;
-            agenciesGrid.DataSource = _agencyService.Search(query);
+            agenciesGrid.DataSource = string.IsNullOrEmpty(query)
+                ? _agencyService.GetAll()
+                : _agencyService.Search(query);
         }
+
+        // ═══════════════════════════════
+        // ТУРЫ
+        // ═══════════════════════════════
         private void LoadToursToGrid()
         {
             toursGrid.DataSource = null;
@@ -125,10 +159,7 @@ namespace TravelAgency.Forms
 
         private void AddTourButton_Click(object sender, EventArgs e)
         {
-            var form = new TourForm(
-                _agencyService.GetAll(),
-                _tourService.GetCountries()
-            );
+            var form = new TourForm(_agencyService.GetAll(), _countryService.GetAll());
             if (form.ShowDialog() == DialogResult.OK)
             {
                 _tourService.Add(form.Tour);
@@ -140,18 +171,13 @@ namespace TravelAgency.Forms
         {
             if (toursGrid.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите тур для редактирования!");
+                MessageBox.Show("Выберите тур!");
                 return;
             }
-
             var tour = toursGrid.SelectedRows[0].DataBoundItem as Tour;
             if (tour == null) return;
 
-            var form = new TourForm(
-                _agencyService.GetAll(),
-                _tourService.GetCountries(),
-                tour
-            );
+            var form = new TourForm(_agencyService.GetAll(), _countryService.GetAll(), tour);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 _tourService.Update(form.Tour);
@@ -163,20 +189,13 @@ namespace TravelAgency.Forms
         {
             if (toursGrid.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите тур для удаления!");
+                MessageBox.Show("Выберите тур!");
                 return;
             }
-
             var tour = toursGrid.SelectedRows[0].DataBoundItem as Tour;
             if (tour == null) return;
 
-            var result = MessageBox.Show(
-                $"Удалить тур '{tour.Name}'?",
-                "Подтверждение",
-                MessageBoxButtons.YesNo
-            );
-
-            if (result == DialogResult.Yes)
+            if (MessageBox.Show($"Удалить тур '{tour.Name}'?", "Подтверждение", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 _tourService.Delete(tour.Id);
                 LoadToursToGrid();
@@ -186,16 +205,69 @@ namespace TravelAgency.Forms
         private void SearchTourButton_Click(object sender, EventArgs e)
         {
             string query = searchTourBox.Text.Trim();
+            toursGrid.DataSource = null;
+            toursGrid.DataSource = string.IsNullOrEmpty(query)
+                ? _tourService.GetAll()
+                : _tourService.Search(query);
+        }
 
-            if (string.IsNullOrEmpty(query))
+        // ═══════════════════════════════
+        // СТРАНЫ
+        // ═══════════════════════════════
+        private void LoadCountriesToGrid()
+        {
+            countriesGrid.DataSource = null;
+            countriesGrid.DataSource = _countryService.GetAll();
+        }
+
+        private void AddCountryButton_Click(object sender, EventArgs e)
+        {
+            var form = new CountryForm();
+            if (form.ShowDialog() == DialogResult.OK)
             {
-                LoadToursToGrid();
+                _countryService.Add(form.Country);
+                LoadCountriesToGrid();
+            }
+        }
+
+        private void EditCountryButton_Click(object sender, EventArgs e)
+        {
+            if (countriesGrid.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите страну!");
                 return;
             }
+            var country = countriesGrid.SelectedRows[0].DataBoundItem as Country;
+            if (country == null) return;
 
-            toursGrid.DataSource = null;
-            toursGrid.DataSource = _tourService.Search(query);
+            var form = new CountryForm(country);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                _countryService.Update(form.Country);
+                LoadCountriesToGrid();
+            }
         }
+
+        private void DeleteCountryButton_Click(object sender, EventArgs e)
+        {
+            if (countriesGrid.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите страну!");
+                return;
+            }
+            var country = countriesGrid.SelectedRows[0].DataBoundItem as Country;
+            if (country == null) return;
+
+            if (MessageBox.Show($"Удалить '{country.Name}'?", "Подтверждение", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                _countryService.Delete(country.Id);
+                LoadCountriesToGrid();
+            }
+        }
+
+        // ═══════════════════════════════
+        // БРОНИРОВАНИЯ
+        // ═══════════════════════════════
         private void LoadBookingsToGrid()
         {
             bookingsGrid.DataSource = null;
@@ -210,7 +282,6 @@ namespace TravelAgency.Forms
                 MessageBox.Show("Сначала добавьте туры!");
                 return;
             }
-
             var form = new BookingForm(tours);
             if (form.ShowDialog() == DialogResult.OK)
             {
@@ -223,20 +294,13 @@ namespace TravelAgency.Forms
         {
             if (bookingsGrid.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите бронирование для удаления!");
+                MessageBox.Show("Выберите бронирование!");
                 return;
             }
-
             var booking = bookingsGrid.SelectedRows[0].DataBoundItem as Booking;
             if (booking == null) return;
 
-            var result = MessageBox.Show(
-                $"Удалить бронирование клиента '{booking.ClientName}'?",
-                "Подтверждение",
-                MessageBoxButtons.YesNo
-            );
-
-            if (result == DialogResult.Yes)
+            if (MessageBox.Show($"Удалить бронь '{booking.ClientName}'?", "Подтверждение", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 _bookingService.Delete(booking.Id);
                 LoadBookingsToGrid();
@@ -247,10 +311,9 @@ namespace TravelAgency.Forms
         {
             if (bookingsGrid.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите бронирование для подтверждения!");
+                MessageBox.Show("Выберите бронирование!");
                 return;
             }
-
             var booking = bookingsGrid.SelectedRows[0].DataBoundItem as Booking;
             if (booking == null) return;
 
@@ -258,11 +321,16 @@ namespace TravelAgency.Forms
             LoadBookingsToGrid();
             MessageBox.Show("Бронирование подтверждено!");
         }
+
+        // ═══════════════════════════════
+        // СОХРАНЕНИЕ / ЗАГРУЗКА
+        // ═══════════════════════════════
         private void SaveData()
         {
             _storage.Save("agencies.json", _agencyService.GetAll());
             _storage.Save("tours.json", _tourService.GetAll());
             _storage.Save("bookings.json", _bookingService.GetAll());
+            _storage.Save("countries.json", _countryService.GetAll());
         }
 
         private void LoadData()
@@ -270,42 +338,28 @@ namespace TravelAgency.Forms
             try
             {
                 var agencies = _storage.Load<Agency>("agencies.json");
-                foreach (var a in agencies)
-                    _agencyService.Add(a);
+                foreach (var a in agencies) _agencyService.Add(a);
 
                 var tours = _storage.Load<Tour>("tours.json");
-                foreach (var t in tours)
-                    _tourService.Add(t);
+                foreach (var t in tours) _tourService.Add(t);
 
                 var bookings = _storage.Load<Booking>("bookings.json");
-                foreach (var b in bookings)
-                    _bookingService.Add(b);
+                foreach (var b in bookings) _bookingService.Add(b);
 
-                LoadAgenciesToGrid();
-                LoadToursToGrid();
-                LoadBookingsToGrid();
+                var countries = _storage.Load<Country>("countries.json");
+                if (countries.Count == 0)
+                {
+                    _countryService.AddDefault();
+                }
+                else
+                {
+                    foreach (var c in countries) _countryService.Add(c);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
             }
-        }
-
-        private void SaveMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveData();
-            MessageBox.Show("Данные сохранены!");
-        }
-
-        private void LoadMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadData();
-            MessageBox.Show("Данные загружены!");
-        }
-
-        private void MainForm_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
-        {
-            SaveData();
         }
     }
 }
