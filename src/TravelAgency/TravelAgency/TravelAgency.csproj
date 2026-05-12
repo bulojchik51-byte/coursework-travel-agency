@@ -55,6 +55,12 @@
     <Compile Include="Forms\AgencyForm.Designer.cs">
       <DependentUpon>AgencyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BookingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BookingForm.Designer.cs">
+      <DependentUpon>BookingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

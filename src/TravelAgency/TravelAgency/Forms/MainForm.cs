@@ -36,6 +36,11 @@ namespace TravelAgency.Forms
             searchTourButton.Click += SearchTourButton_Click;
 
             LoadToursToGrid();
+            addBookingButton.Click += AddBookingButton_Click;
+            deleteBookingButton.Click += DeleteBookingButton_Click;
+            confirmBookingButton.Click += ConfirmBookingButton_Click;
+
+            LoadBookingsToGrid();
         }
 
         private void LoadAgenciesToGrid()
@@ -188,6 +193,68 @@ namespace TravelAgency.Forms
 
             toursGrid.DataSource = null;
             toursGrid.DataSource = _tourService.Search(query);
+        }
+        private void LoadBookingsToGrid()
+        {
+            bookingsGrid.DataSource = null;
+            bookingsGrid.DataSource = _bookingService.GetAll();
+        }
+
+        private void AddBookingButton_Click(object sender, EventArgs e)
+        {
+            var tours = _tourService.GetAll();
+            if (tours.Count == 0)
+            {
+                MessageBox.Show("Сначала добавьте туры!");
+                return;
+            }
+
+            var form = new BookingForm(tours);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                _bookingService.Add(form.Booking);
+                LoadBookingsToGrid();
+            }
+        }
+
+        private void DeleteBookingButton_Click(object sender, EventArgs e)
+        {
+            if (bookingsGrid.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите бронирование для удаления!");
+                return;
+            }
+
+            var booking = bookingsGrid.SelectedRows[0].DataBoundItem as Booking;
+            if (booking == null) return;
+
+            var result = MessageBox.Show(
+                $"Удалить бронирование клиента '{booking.ClientName}'?",
+                "Подтверждение",
+                MessageBoxButtons.YesNo
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                _bookingService.Delete(booking.Id);
+                LoadBookingsToGrid();
+            }
+        }
+
+        private void ConfirmBookingButton_Click(object sender, EventArgs e)
+        {
+            if (bookingsGrid.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите бронирование для подтверждения!");
+                return;
+            }
+
+            var booking = bookingsGrid.SelectedRows[0].DataBoundItem as Booking;
+            if (booking == null) return;
+
+            _bookingService.UpdateStatus(booking.Id, "Подтверждено");
+            LoadBookingsToGrid();
+            MessageBox.Show("Бронирование подтверждено!");
         }
     }
 }
