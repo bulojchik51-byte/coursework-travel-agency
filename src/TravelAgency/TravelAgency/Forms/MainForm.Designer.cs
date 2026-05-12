@@ -35,6 +35,13 @@
         private System.Windows.Forms.Button searchTourButton;
         private System.Windows.Forms.Panel tourButtonPanel;
 
+        // Бронирования
+        private System.Windows.Forms.DataGridView bookingsGrid;
+        private System.Windows.Forms.Button addBookingButton;
+        private System.Windows.Forms.Button deleteBookingButton;
+        private System.Windows.Forms.Button confirmBookingButton;
+        private System.Windows.Forms.Panel bookingButtonPanel;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -73,6 +80,12 @@
             this.searchTourButton = new System.Windows.Forms.Button();
             this.tourButtonPanel = new System.Windows.Forms.Panel();
 
+            this.bookingsGrid = new System.Windows.Forms.DataGridView();
+            this.addBookingButton = new System.Windows.Forms.Button();
+            this.deleteBookingButton = new System.Windows.Forms.Button();
+            this.confirmBookingButton = new System.Windows.Forms.Button();
+            this.bookingButtonPanel = new System.Windows.Forms.Panel();
+
             // MenuStrip
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.fileMenu,
@@ -109,82 +122,87 @@
             // Панель кнопок агентств
             this.agencyButtonPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.agencyButtonPanel.Height = 40;
-
             this.addAgencyButton.Text = "Добавить";
             this.addAgencyButton.Width = 90;
             this.addAgencyButton.Location = new System.Drawing.Point(5, 8);
-
             this.editAgencyButton.Text = "Редактировать";
             this.editAgencyButton.Width = 110;
             this.editAgencyButton.Location = new System.Drawing.Point(100, 8);
-
             this.deleteAgencyButton.Text = "Удалить";
             this.deleteAgencyButton.Width = 90;
             this.deleteAgencyButton.Location = new System.Drawing.Point(215, 8);
-
             this.searchAgencyBox.Width = 150;
             this.searchAgencyBox.Location = new System.Drawing.Point(320, 10);
-
             this.searchAgencyButton.Text = "Поиск";
             this.searchAgencyButton.Width = 70;
             this.searchAgencyButton.Location = new System.Drawing.Point(475, 8);
-
             this.agencyButtonPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
-                this.addAgencyButton,
-                this.editAgencyButton,
-                this.deleteAgencyButton,
-                this.searchAgencyBox,
+                this.addAgencyButton, this.editAgencyButton,
+                this.deleteAgencyButton, this.searchAgencyBox,
                 this.searchAgencyButton
             });
-
             this.agenciesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.agenciesGrid.ReadOnly = true;
             this.agenciesGrid.AllowUserToAddRows = false;
             this.agenciesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.agenciesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-
             this.agenciesTab.Controls.Add(this.agenciesGrid);
             this.agenciesTab.Controls.Add(this.agencyButtonPanel);
 
             // Панель кнопок туров
             this.tourButtonPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.tourButtonPanel.Height = 40;
-
             this.addTourButton.Text = "Добавить";
             this.addTourButton.Width = 90;
             this.addTourButton.Location = new System.Drawing.Point(5, 8);
-
             this.editTourButton.Text = "Редактировать";
             this.editTourButton.Width = 110;
             this.editTourButton.Location = new System.Drawing.Point(100, 8);
-
             this.deleteTourButton.Text = "Удалить";
             this.deleteTourButton.Width = 90;
             this.deleteTourButton.Location = new System.Drawing.Point(215, 8);
-
             this.searchTourBox.Width = 150;
             this.searchTourBox.Location = new System.Drawing.Point(320, 10);
-
             this.searchTourButton.Text = "Поиск";
             this.searchTourButton.Width = 70;
             this.searchTourButton.Location = new System.Drawing.Point(475, 8);
-
             this.tourButtonPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
-                this.addTourButton,
-                this.editTourButton,
-                this.deleteTourButton,
-                this.searchTourBox,
+                this.addTourButton, this.editTourButton,
+                this.deleteTourButton, this.searchTourBox,
                 this.searchTourButton
             });
-
             this.toursGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toursGrid.ReadOnly = true;
             this.toursGrid.AllowUserToAddRows = false;
             this.toursGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.toursGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-
             this.toursTab.Controls.Add(this.toursGrid);
             this.toursTab.Controls.Add(this.tourButtonPanel);
+
+            // Панель кнопок бронирований
+            this.bookingButtonPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bookingButtonPanel.Height = 40;
+            this.addBookingButton.Text = "Добавить";
+            this.addBookingButton.Width = 90;
+            this.addBookingButton.Location = new System.Drawing.Point(5, 8);
+            this.deleteBookingButton.Text = "Удалить";
+            this.deleteBookingButton.Width = 90;
+            this.deleteBookingButton.Location = new System.Drawing.Point(100, 8);
+            this.confirmBookingButton.Text = "Подтвердить";
+            this.confirmBookingButton.Width = 100;
+            this.confirmBookingButton.Location = new System.Drawing.Point(195, 8);
+            this.bookingButtonPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
+                this.addBookingButton,
+                this.deleteBookingButton,
+                this.confirmBookingButton
+            });
+            this.bookingsGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bookingsGrid.ReadOnly = true;
+            this.bookingsGrid.AllowUserToAddRows = false;
+            this.bookingsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.bookingsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.bookingsTab.Controls.Add(this.bookingsGrid);
+            this.bookingsTab.Controls.Add(this.bookingButtonPanel);
 
             // MainForm
             this.Text = "Турагентство";
