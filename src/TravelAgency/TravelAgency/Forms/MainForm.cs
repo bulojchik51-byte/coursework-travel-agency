@@ -30,6 +30,12 @@ namespace TravelAgency.Forms
             deleteAgencyButton.Click += DeleteAgencyButton_Click;
             searchAgencyButton.Click += SearchAgencyButton_Click;
             exitMenuItem.Click += (s, e) => Application.Exit();
+            addTourButton.Click += AddTourButton_Click;
+            editTourButton.Click += EditTourButton_Click;
+            deleteTourButton.Click += DeleteTourButton_Click;
+            searchTourButton.Click += SearchTourButton_Click;
+
+            LoadToursToGrid();
         }
 
         private void LoadAgenciesToGrid()
@@ -103,6 +109,85 @@ namespace TravelAgency.Forms
 
             agenciesGrid.DataSource = null;
             agenciesGrid.DataSource = _agencyService.Search(query);
+        }
+        private void LoadToursToGrid()
+        {
+            toursGrid.DataSource = null;
+            toursGrid.DataSource = _tourService.GetAll();
+        }
+
+        private void AddTourButton_Click(object sender, EventArgs e)
+        {
+            var form = new TourForm(
+                _agencyService.GetAll(),
+                _tourService.GetCountries()
+            );
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                _tourService.Add(form.Tour);
+                LoadToursToGrid();
+            }
+        }
+
+        private void EditTourButton_Click(object sender, EventArgs e)
+        {
+            if (toursGrid.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите тур для редактирования!");
+                return;
+            }
+
+            var tour = toursGrid.SelectedRows[0].DataBoundItem as Tour;
+            if (tour == null) return;
+
+            var form = new TourForm(
+                _agencyService.GetAll(),
+                _tourService.GetCountries(),
+                tour
+            );
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                _tourService.Update(form.Tour);
+                LoadToursToGrid();
+            }
+        }
+
+        private void DeleteTourButton_Click(object sender, EventArgs e)
+        {
+            if (toursGrid.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите тур для удаления!");
+                return;
+            }
+
+            var tour = toursGrid.SelectedRows[0].DataBoundItem as Tour;
+            if (tour == null) return;
+
+            var result = MessageBox.Show(
+                $"Удалить тур '{tour.Name}'?",
+                "Подтверждение",
+                MessageBoxButtons.YesNo
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                _tourService.Delete(tour.Id);
+                LoadToursToGrid();
+            }
+        }
+
+        private void SearchTourButton_Click(object sender, EventArgs e)
+        {
+            string query = searchTourBox.Text.Trim();
+
+            if (string.IsNullOrEmpty(query))
+            {
+                LoadToursToGrid();
+                return;
+            }
+
+            toursGrid.DataSource = null;
+            toursGrid.DataSource = _tourService.Search(query);
         }
     }
 }

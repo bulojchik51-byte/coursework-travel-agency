@@ -46,5 +46,19 @@ namespace TravelAgency.Services
                             t.Country.Name.ToLower().Contains(query.ToLower()))
                 .ToList();
         }
+        public List<Country> GetCountries()
+        {
+            return new List<Country>
+    {
+        new Country { Id = 1, Name = "Турция" },
+        new Country { Id = 2, Name = "Египет" },
+        new Country { Id = 3, Name = "Испания" },
+        new Country { Id = 4, Name = "Италия" },
+        new Country { Id = 5, Name = "Греция" },
+        new Country { Id = 6, Name = "Таиланд" },
+        new Country { Id = 7, Name = "ОАЭ" },
+        new Country { Id = 8, Name = "Франция" }
+    };
+        }
     }
 }

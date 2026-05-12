@@ -26,6 +26,15 @@
         private System.Windows.Forms.Button searchAgencyButton;
         private System.Windows.Forms.Panel agencyButtonPanel;
 
+        // Туры
+        private System.Windows.Forms.DataGridView toursGrid;
+        private System.Windows.Forms.Button addTourButton;
+        private System.Windows.Forms.Button editTourButton;
+        private System.Windows.Forms.Button deleteTourButton;
+        private System.Windows.Forms.TextBox searchTourBox;
+        private System.Windows.Forms.Button searchTourButton;
+        private System.Windows.Forms.Panel tourButtonPanel;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -56,6 +65,14 @@
             this.searchAgencyButton = new System.Windows.Forms.Button();
             this.agencyButtonPanel = new System.Windows.Forms.Panel();
 
+            this.toursGrid = new System.Windows.Forms.DataGridView();
+            this.addTourButton = new System.Windows.Forms.Button();
+            this.editTourButton = new System.Windows.Forms.Button();
+            this.deleteTourButton = new System.Windows.Forms.Button();
+            this.searchTourBox = new System.Windows.Forms.TextBox();
+            this.searchTourButton = new System.Windows.Forms.Button();
+            this.tourButtonPanel = new System.Windows.Forms.Panel();
+
             // MenuStrip
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.fileMenu,
@@ -64,7 +81,6 @@
                 this.bookingsMenuItem
             });
 
-            // Файл
             this.fileMenu.Text = "Файл";
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                 this.saveMenuItem,
@@ -121,7 +137,6 @@
                 this.searchAgencyButton
             });
 
-            // DataGridView агентств
             this.agenciesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.agenciesGrid.ReadOnly = true;
             this.agenciesGrid.AllowUserToAddRows = false;
@@ -130,6 +145,46 @@
 
             this.agenciesTab.Controls.Add(this.agenciesGrid);
             this.agenciesTab.Controls.Add(this.agencyButtonPanel);
+
+            // Панель кнопок туров
+            this.tourButtonPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tourButtonPanel.Height = 40;
+
+            this.addTourButton.Text = "Добавить";
+            this.addTourButton.Width = 90;
+            this.addTourButton.Location = new System.Drawing.Point(5, 8);
+
+            this.editTourButton.Text = "Редактировать";
+            this.editTourButton.Width = 110;
+            this.editTourButton.Location = new System.Drawing.Point(100, 8);
+
+            this.deleteTourButton.Text = "Удалить";
+            this.deleteTourButton.Width = 90;
+            this.deleteTourButton.Location = new System.Drawing.Point(215, 8);
+
+            this.searchTourBox.Width = 150;
+            this.searchTourBox.Location = new System.Drawing.Point(320, 10);
+
+            this.searchTourButton.Text = "Поиск";
+            this.searchTourButton.Width = 70;
+            this.searchTourButton.Location = new System.Drawing.Point(475, 8);
+
+            this.tourButtonPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
+                this.addTourButton,
+                this.editTourButton,
+                this.deleteTourButton,
+                this.searchTourBox,
+                this.searchTourButton
+            });
+
+            this.toursGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toursGrid.ReadOnly = true;
+            this.toursGrid.AllowUserToAddRows = false;
+            this.toursGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.toursGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+
+            this.toursTab.Controls.Add(this.toursGrid);
+            this.toursTab.Controls.Add(this.tourButtonPanel);
 
             // MainForm
             this.Text = "Турагентство";
