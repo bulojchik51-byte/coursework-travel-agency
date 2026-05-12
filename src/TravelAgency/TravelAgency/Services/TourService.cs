@@ -46,6 +46,20 @@ namespace TravelAgency.Services
                             t.Country.Name.ToLower().Contains(query.ToLower()))
                 .ToList();
         }
-        
+        public List<Tour> Filter(decimal? minPrice, decimal? maxPrice, DateTime? fromDate)
+        {
+            var result = _tours.AsEnumerable();
+
+            if (minPrice.HasValue)
+                result = result.Where(t => t.Price >= minPrice.Value);
+
+            if (maxPrice.HasValue)
+                result = result.Where(t => t.Price <= maxPrice.Value);
+
+            if (fromDate.HasValue)
+                result = result.Where(t => t.DepartureDate >= fromDate.Value);
+
+            return result.ToList();
+        }
     }
 }

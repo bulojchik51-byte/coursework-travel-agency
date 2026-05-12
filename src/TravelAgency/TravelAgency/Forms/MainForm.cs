@@ -53,6 +53,7 @@ namespace TravelAgency.Forms
             addBookingButton.Click += AddBookingButton_Click;
             deleteBookingButton.Click += DeleteBookingButton_Click;
             confirmBookingButton.Click += ConfirmBookingButton_Click;
+            
 
             this.FormClosing += (s, e) => SaveData();
 
@@ -69,6 +70,29 @@ namespace TravelAgency.Forms
             bookingsPanel.Visible = false;
 
             panel.Visible = true;
+
+            // Подсветка активной кнопки
+            foreach (Control ctrl in sidePanel.Controls)
+            {
+                if (ctrl is Button btn)
+                {
+                    btn.BackColor = System.Drawing.Color.FromArgb(31, 43, 71);
+                    btn.ForeColor = System.Drawing.Color.FromArgb(180, 200, 230);
+                }
+            }
+
+            Button activeBtn = null;
+            if (panel == homePanel) activeBtn = navHomeButton;
+            else if (panel == agenciesPanel) activeBtn = navAgenciesButton;
+            else if (panel == toursPanel) activeBtn = navToursButton;
+            else if (panel == countriesPanel) activeBtn = navCountriesButton;
+            else if (panel == bookingsPanel) activeBtn = navBookingsButton;
+
+            if (activeBtn != null)
+            {
+                activeBtn.BackColor = System.Drawing.Color.FromArgb(52, 73, 120);
+                activeBtn.ForeColor = System.Drawing.Color.White;
+            }
 
             if (panel == homePanel) UpdateStats();
             if (panel == agenciesPanel) LoadAgenciesToGrid();
@@ -210,7 +234,7 @@ namespace TravelAgency.Forms
                 ? _tourService.GetAll()
                 : _tourService.Search(query);
         }
-
+      
         // ═══════════════════════════════
         // СТРАНЫ
         // ═══════════════════════════════
@@ -361,5 +385,7 @@ namespace TravelAgency.Forms
                 MessageBox.Show($"Ошибка загрузки: {ex.Message}");
             }
         }
+
     }
+
 }

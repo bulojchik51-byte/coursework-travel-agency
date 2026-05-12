@@ -120,7 +120,7 @@
             this.deleteTourButton = new System.Windows.Forms.Button();
             this.searchTourBox = new System.Windows.Forms.TextBox();
             this.searchTourButton = new System.Windows.Forms.Button();
-
+            
             // Страны
             this.countriesTitleLabel = new System.Windows.Forms.Label();
             this.countriesGrid = new System.Windows.Forms.DataGridView();
@@ -254,6 +254,7 @@
             this.searchTourBox.Font = new System.Drawing.Font("Segoe UI", 10);
 
             SetupActionButton(this.searchTourButton, "🔍 Поиск", 555, 65);
+            
 
             this.toursGrid.Location = new System.Drawing.Point(20, 105);
             this.toursGrid.Size = new System.Drawing.Size(840, 420);
@@ -264,6 +265,7 @@
                 this.addTourButton, this.editTourButton,
                 this.deleteTourButton, this.searchTourBox,
                 this.searchTourButton, this.toursGrid
+
             });
 
             // ═══════════════════════════════
