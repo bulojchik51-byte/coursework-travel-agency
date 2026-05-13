@@ -35,12 +35,23 @@ namespace TravelAgency.Services
 
         public void AddDefault()
         {
-            var defaults = new List<string> {
-                "Турция", "Египет", "Испания",
-                "Италия", "Греция", "Таиланд", "ОАЭ", "Франция"
-            };
-            foreach (var name in defaults)
-                Add(new Country { Name = name });
+            var defaults = new List<(string Name, bool Visa)>
+    {
+        ("Турция", false),
+        ("Египет", false),
+        ("Испания", true),
+        ("Италия", true),
+        ("Греция", true),
+        ("Таиланд", true),
+        ("ОАЭ", false),
+        ("Франция", true),
+        ("Марокко", true),
+        ("Норвегия", true),
+        ("Япония", true)
+    };
+
+            foreach (var (name, visa) in defaults)
+                Add(new Country { Name = name, VisaRequired = visa });
         }
     }
 }

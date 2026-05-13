@@ -25,9 +25,9 @@ namespace TravelAgency.Forms
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(clientNameBox.Text))
+            if (string.IsNullOrWhiteSpace(clientLastNameBox.Text))
             {
-                MessageBox.Show("Введите имя клиента!");
+                MessageBox.Show("Введите фамилию клиента!");
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace TravelAgency.Forms
                 return;
             }
 
-            Booking.ClientName = clientNameBox.Text.Trim();
+            Booking.ClientLastName = clientLastNameBox.Text.Trim();
             Booking.ClientPhone = clientPhoneBox.Text.Trim();
             Booking.Tour = tourComboBox.SelectedItem as Tour;
 

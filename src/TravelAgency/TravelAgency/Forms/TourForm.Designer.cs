@@ -20,6 +20,8 @@
         private System.Windows.Forms.ComboBox countryComboBox;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label citiesLabel;
+        private System.Windows.Forms.TextBox citiesBox;
 
         protected override void Dispose(bool disposing)
         {
@@ -81,6 +83,14 @@
             this.departureLabel.Width = 120;
             this.departurePicker.Location = new System.Drawing.Point(140, 152);
             this.departurePicker.Width = 220;
+            this.citiesLabel = new System.Windows.Forms.Label();
+            this.citiesBox = new System.Windows.Forms.TextBox();
+
+            this.citiesLabel.Text = "Города:";
+            this.citiesLabel.Location = new System.Drawing.Point(12, 190);
+            this.citiesLabel.Width = 120;
+            this.citiesBox.Location = new System.Drawing.Point(140, 187);
+            this.citiesBox.Width = 220;
 
             // Агентство
             this.agencyLabel.Text = "Агентство:";

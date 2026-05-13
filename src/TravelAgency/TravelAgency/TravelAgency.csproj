@@ -49,11 +49,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\AgencyDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AgencyDetailsForm.Designer.cs">
+      <DependentUpon>AgencyDetailsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AgencyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\AgencyForm.Designer.cs">
       <DependentUpon>AgencyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BookingDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BookingDetailsForm.Designer.cs">
+      <DependentUpon>BookingDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BookingForm.cs">
       <SubType>Form</SubType>
@@ -72,6 +84,12 @@
     </Compile>
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TourDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TourDetailsForm.Designer.cs">
+      <DependentUpon>TourDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TourForm.cs">
       <SubType>Form</SubType>

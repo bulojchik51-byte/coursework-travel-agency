@@ -24,6 +24,7 @@ namespace TravelAgency.Forms
             if (tour != null)
             {
                 Tour = tour;
+                citiesBox.Text = tour.Cities;
                 nameBox.Text = tour.Name;
                 descriptionBox.Text = tour.Description;
                 priceBox.Text = tour.Price.ToString();
@@ -71,8 +72,10 @@ namespace TravelAgency.Forms
             Tour.DepartureDate = departurePicker.Value;
             Tour.Agency = agencyComboBox.SelectedItem as Agency;
             Tour.Country = countryComboBox.SelectedItem as Country;
+            Tour.Cities = citiesBox.Text.Trim();
 
             DialogResult = DialogResult.OK;
         }
+
     }
 }

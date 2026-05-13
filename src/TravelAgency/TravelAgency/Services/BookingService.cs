@@ -10,6 +10,10 @@ namespace TravelAgency.Services
         private List<Booking> _bookings = new List<Booking>();
 
         public List<Booking> GetAll() => _bookings;
+        public void AddLoaded(Booking booking)
+        {
+            _bookings.Add(booking);
+        }
 
         public void Add(Booking booking)
         {

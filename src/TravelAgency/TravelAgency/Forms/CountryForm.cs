@@ -16,6 +16,7 @@ namespace TravelAgency.Forms
                 Country = country;
                 nameBox.Text = country.Name;
                 descriptionBox.Text = country.Description;
+                visaCheckBox.Checked = country.VisaRequired;
             }
             else
             {
@@ -31,6 +32,7 @@ namespace TravelAgency.Forms
                 }
                 Country.Name = nameBox.Text.Trim();
                 Country.Description = descriptionBox.Text.Trim();
+                Country.VisaRequired = visaCheckBox.Checked;
                 DialogResult = DialogResult.OK;
             };
 
